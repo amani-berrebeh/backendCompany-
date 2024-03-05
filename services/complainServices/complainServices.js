@@ -29,14 +29,17 @@ async function saveMediaFile(base64String, fileName) {
   });
 }
 
-const respondToComplaint = async (complaintId, responseMessage, responseAuthor) => {
+const respondToComplaint = async (_id, responseMessage, responseAuthor) => {
   try {
       // Update complaint status to "answered"
-      await complainDao.updateComplaintStatus(complaintId, 'answered');
-
+      console.log(_id)
+      console.log(responseMessage)
+      await complainDao.updateComplaintStatus(_id, 'answered');
+      console.log(_id)
+      console.log(responseMessage)
       // Update response message, author, and date
       const currentDate = new Date();
-      await complainDao.updateComplaintResponse(complaintId, responseMessage, responseAuthor, currentDate);
+      await complainDao.updateComplaintResponse(_id, responseMessage, responseAuthor, currentDate);
   } catch (error) {
       console.error('Error responding to complaint:', error);
       throw error;

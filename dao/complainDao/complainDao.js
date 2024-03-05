@@ -5,9 +5,9 @@ const createComplain = async (complainData) => {
 };
 
 
-const updateComplaintStatus = async (complaintId, newStatus) => {
+const updateComplaintStatus = async (_id, newStatus) => {
   try {
-      return await Complain.findByIdAndUpdate(complaintId, { status: newStatus });
+      return await Complain.findByIdAndUpdate(_id, { status: newStatus });
   } catch (error) {
       console.error('Error updating complaint status in DAO:', error);
       throw error;
@@ -15,9 +15,11 @@ const updateComplaintStatus = async (complaintId, newStatus) => {
 };
 
 // DAO method to update the complaint response (message, author, and date)
-const updateComplaintResponse = async (complaintId, responseMessage, responseAuthor, responseDate) => {
+const updateComplaintResponse = async (_id, responseMessage, responseAuthor, responseDate) => {
+ 
+  console.log("from dao",_id)
   try {
-      return await Complain.findByIdAndUpdate(complaintId, {
+      return await Complain.findByIdAndUpdate({_id}, {
           responseMessage,
           responseAuthor,
           responseDate

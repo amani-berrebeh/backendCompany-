@@ -52,11 +52,11 @@ const addNewComplain = async (req, res) => {
 
 const respondToComplain = async (req, res) => {
   try {
-      const { complaintId, responseMessage, responseAuthor } = req.body;
-
+      const { _id, responseMessage, responseAuthor } = req.body;
+console.log(req.body)
       // Update status to "answered"
-      await complainService.respondToComplaint(complaintId, responseMessage, responseAuthor);
-
+      await complainService.respondToComplaint(_id, responseMessage, responseAuthor);
+      console.log(req.body)
       res.sendStatus(200);
   } catch (error) {
       console.error('Error responding to complaint:', error);
