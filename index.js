@@ -8,6 +8,7 @@ const employeeRoutes= require ("./routes/employeeRoutes/employeeRoutes")
 const employeeAttendanceRoutes= require("./routes/employeeAttendanceRoutes/employeeAttendanceRoute")
 const studentAttendanceRoutes= require("./routes/studentAttendanceRoutes/studentAttendanceRoute")
 const groupEmployeeRoutes= require("./routes/groupCompanyRoutes/groupCompanyRoutes")
+const complainRoutes = require("./routes/complainRoutes/complainRoutes")
 
 dotenv.config();
 app.use(cors())
@@ -27,6 +28,7 @@ mongoose.connect(process.env.MONGO_URL, {})
 
     //routes
 app.use("/employees",employeeRoutes)
+app.use("/complains",complainRoutes)
 app.use("/companies",companyRoutes)
 app.use("/employeeAttendance",employeeAttendanceRoutes)
 app.use("/studentAttendance",studentAttendanceRoutes)
