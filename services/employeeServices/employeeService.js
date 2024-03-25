@@ -4,8 +4,6 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 
-
-
 async function saveMediaToServer(documents){
   let counter = 0;
   for (const file of documents){

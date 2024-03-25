@@ -27,22 +27,13 @@ const addNewEmployee = async (req, res) => {
       status,
     } = req.body;
 
-    // let grouppId= groupId._id;
-    // if (grouppId === "" ) {
-    //   grouppId = "001122334455667788991234"
-    // }
-    console.log(req.body);
+  
+   
     const legalcardPath = "files/employeeFiles/";
     const photoPath = "files/employeeFiles/";
 
-    let legalcard = globalFunctions.generateUniqueFilename(
-      legalcardExtension,
-      "employeeMedia"
-    );
-    let photos = globalFunctions.generateUniqueFilename(
-      photosExtension,
-      "employeePhotos"
-    );
+    let legalcard = globalFunctions.generateUniqueFilename( legalcardExtension,  "employeeMedia" );
+    let photos = globalFunctions.generateUniqueFilename( photosExtension, "employeePhotos" );
 
     let documents = [
       {

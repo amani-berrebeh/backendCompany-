@@ -1,7 +1,12 @@
 const Complain = require('../../models/complainSchema/complainSchema');
 
 const createComplain = async (complainData) => {
+ try {
   return await Complain.create(complainData);
+ } catch (error) {
+  console.error('Error updating complaint status in DAO:', error);
+  throw error;
+ } 
 };
 
 
@@ -15,14 +20,17 @@ const updateComplaintStatus = async (_id, newStatus) => {
 };
 
 // DAO method to update the complaint response (message, author, and date)
-const updateComplaintResponse = async (_id, responseMessage, responseAuthor, responseDate) => {
+const updateComplaintResponse = async (_id, responseMessage, responseAuthor, responseDate, resPhoto, resVideo) => {
  
-  console.log("from dao",_id)
+  console.log("from dao",resPhoto)
+  console.log("from dao",resVideo)
   try {
       return await Complain.findByIdAndUpdate({_id}, {
           responseMessage,
           responseAuthor,
-          responseDate
+          responseDate,
+          resPhoto,
+          resVideo
       });
   } catch (error) {
       console.error('Error updating complaint response in DAO:', error);
@@ -31,9 +39,26 @@ const updateComplaintResponse = async (_id, responseMessage, responseAuthor, res
 };
 
 
+
+
+const updateComplainToPushed= async(_id, newStatus)=> {
+  try {
+      const updatedComplain = await Complain.findByIdAndUpdate(
+          _id,
+          { status: newStatus },
+          { new: true } // to return the updated document
+      );
+      return updatedComplain;
+  } catch (error) {
+      throw error;
+  }
+}
+
+
 const getComplains = async () => {
   return await Complain.find().populate("id_employee");
 };
+
 
 const getComplainById = async (id) => {
   return await Complain.findById(id);
@@ -47,6 +72,12 @@ const deleteComplain = async (id) => {
   return await Complain.findByIdAndDelete(id);
 };
 
+
+
+// const deleteComplain = async () => {
+//   return await Complain.deleteMany({ _id: null });
+// };
+
 module.exports = {
   createComplain,
   getComplains,
@@ -55,5 +86,6 @@ module.exports = {
   updateComplain,
   deleteComplain,
   updateComplaintStatus,
+  updateComplainToPushed
   
 };

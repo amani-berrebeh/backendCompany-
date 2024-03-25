@@ -56,8 +56,17 @@ const deleteGroupEmployee = async (id) => {
     return await groupEmployee.findByIdAndDelete(id);
 };
 
+async function getActiveGroups() {
+    try {
+        // Query only groups with status "active" and populate the 'employees' field
+        return await groupEmployee.find({ status: 'active' }).populate('employees').exec();
+    } catch (error) {
+        throw new Error('Error fetching active groups: ' + error.message);
+    }
+}
 
 
 
 
-module.exports = { getAllGroups, createGroupAndAssignEmployees, getGroupByIdCompany, addNewGroup, getGroupByIdEmployee, getGroupEmployeeById, updateGroupEmployee, deleteGroupEmployee, getallGroupEmployee};
+
+module.exports = { getActiveGroups, getAllGroups, createGroupAndAssignEmployees, getGroupByIdCompany, addNewGroup, getGroupByIdEmployee, getGroupEmployeeById, updateGroupEmployee, deleteGroupEmployee, getallGroupEmployee};
