@@ -10,5 +10,6 @@ router.get('/getComplain/:id', complainController.getComplainById);
 router.get('/getAllComplains', complainController.getAllComplains);
 router.delete('/deleteComplain/:id', complainController.deleteComplainById);
 router.put('/updateToPushed', complainController.updateComplainToPushed);
+router.put('/updateToArchived', complainController.updateComplainToArchived);
 
 module.exports = router;

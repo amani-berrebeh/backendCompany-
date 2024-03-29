@@ -51,6 +51,7 @@ const addNewGroup = async (req, res) => {
     timeEnd,
     status,
     id_company,
+    program,
     employees
       } = req.body;
   console.log(req.body)
@@ -65,6 +66,7 @@ const addNewGroup = async (req, res) => {
         timeEnd,
         status,
         id_company,
+        program,
         employees
       });
       res.json(group);

@@ -21,6 +21,7 @@ const addNewComplain = async (req, res) => {
       photoExtension,
       videoBase64Strings,
       videoExtension,
+      archived,
       resPhoto,
       resVideo,
       resPhotoBase64Strings,
@@ -81,6 +82,7 @@ const addNewComplain = async (req, res) => {
       responseAuthor,
       responseDate,
       status,
+      archived,
       pdf,
       photo,
       video,
@@ -220,16 +222,24 @@ const respondToComplain = async (req, res) => {
     const complainResData = {
       _id,
       responseMessage,
+      responseAuthor,
       responseDate,
       resPhoto,
       resVideo,
     };
     console.log("From Controllers",documents);
-    await complainService.respondToComplaint(_id,
-      responseMessage,
-      responseDate,
-      resPhoto,
-      resVideo);
+    // await complainService.respondToComplaint(
+    //   _id,
+    //   responseMessage,
+    //   responseDate,
+    //   responseAuthor,
+    //   resPhoto,
+    //   resVideo
+    //   );
+    await complainService.respondToComplaint(
+     complainResData,
+     documents
+      );
     console.log(req.body);
     res.sendStatus(200);
   } catch (error) {
@@ -244,6 +254,19 @@ const updateComplainToPushed = async (req, res) => {
 
     // Update the status to "pushed"
     const updatedComplain = await complainService.updateComplainToPushed(_id);
+    return res.status(200).json(updatedComplain);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+const updateComplainToArchived = async (req, res) => {
+  try {
+    const { _id } = req.body;
+
+    // Update the status to "archived"
+    const updatedComplain = await complainService.updateComplainToArchived(_id);
     return res.status(200).json(updatedComplain);
   } catch (error) {
     console.error(error);
@@ -340,4 +363,5 @@ module.exports = {
   deleteComplainById,
   respondToComplain,
   updateComplainToPushed,
+  updateComplainToArchived
 };

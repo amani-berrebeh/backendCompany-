@@ -11,7 +11,8 @@ const groupEmployeeSchema = new mongoose.Schema({
     timeEnd: String,
     status: String,
     id_company: String,
-    employees: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Employee' }]
+    employees: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Employee' }],
+    program: { type: mongoose.Schema.Types.ObjectId, ref: 'Programm',required:false  },
 });
 
 module.exports = mongoose.model('groupEmployee', groupEmployeeSchema);

@@ -53,6 +53,18 @@ const updateComplainToPushed= async(_id, newStatus)=> {
       throw error;
   }
 }
+const updateComplainToArchived= async(_id, newStatus)=> {
+  try {
+      const updatedComplain = await Complain.findByIdAndUpdate(
+          _id,
+          { archived: newStatus },
+          { new: true } // to return the updated document
+      );
+      return updatedComplain;
+  } catch (error) {
+      throw error;
+  }
+}
 
 
 const getComplains = async () => {
@@ -86,6 +98,7 @@ module.exports = {
   updateComplain,
   deleteComplain,
   updateComplaintStatus,
-  updateComplainToPushed
+  updateComplainToPushed,
+  updateComplainToArchived
   
 };

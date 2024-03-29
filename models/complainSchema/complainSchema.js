@@ -12,12 +12,12 @@ const complainSchema = new mongoose.Schema({
   responseAuthor: String,
   responseDate: String,
   status: String,
+  archived:String,
   pdf: String,
   photo: [String],
   video:String,
   resVideo:String,
   resPhoto:String
-
 }, {
   timestamps: true
 });
