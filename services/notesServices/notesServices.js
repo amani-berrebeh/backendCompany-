@@ -48,11 +48,14 @@ const updateNote = async (id, updateData) => {
 const deleteNote = async (id) => {
   return await noteDao.deleteNote(id);
 };
-
+const getNotesByIdCompany = async (id_corporate) => {
+  return await noteDao.getNotesByIdCompany(id_corporate);
+};
 module.exports = {
   createNote,
   getNotes,
   getNoteById,
   updateNote,
   deleteNote,
+  getNotesByIdCompany
 };

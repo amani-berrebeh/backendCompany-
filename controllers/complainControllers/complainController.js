@@ -354,6 +354,20 @@ const deleteComplainById = async (req, res) => {
 //     res.status(500).send(error.message);
 //   }
 // };
+const getComplainByIdCompany = async (req, res) => {
+  try {
+    const id_corporate = req.body.id_corporate;
+    const getComplainByIdCompany =
+      await complainService.getComplainByIdCompany(id_corporate);
+    if (!getComplainByIdCompany) {
+      res.status(404).send("employee not found");
+    }
+    res.json({ getComplainByIdCompany });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send(error.message);
+  }
+};
 
 module.exports = {
   addNewComplain,
@@ -363,5 +377,6 @@ module.exports = {
   deleteComplainById,
   respondToComplain,
   updateComplainToPushed,
-  updateComplainToArchived
+  updateComplainToArchived,
+  getComplainByIdCompany
 };

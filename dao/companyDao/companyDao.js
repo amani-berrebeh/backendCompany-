@@ -9,9 +9,22 @@ const findCompanyByLogin = async (login) => {
     return await Company.findOne({ login });
 };
 
-const getCompanies = async () => {
-    return await Company.find();
-};
+// find Company by token
+const findCompanyByToken = async (token) => {
+    let api_token = token;
+    return await Company.findOne({ api_token });
+  };
+// get all Company
+const getAllCompanies = async () => {
+    return await Company.find({});
+  };
+  const updateJwtToken = async (id, token) => {
+    return await Company.findByIdAndUpdate({ _id:id }, {
+      $set: {
+        api_token: token
+      }
+    });
+  }
 
 const updateCompany = async (id, updateData) => {
     return await Company.findByIdAndUpdate(id, updateData, { new: true });
@@ -36,16 +49,29 @@ const updatePassword = async (id, password) => {
       }
     });
   }
+  
+    // logout
+    const logout = async (id) => {
+        return await Company.findByIdAndUpdate({ _id:id }, {
+          $set: {
+            api_token: ""
+          }
+        });
+      }
+  
 
 
 module.exports = {
     createCompany,
-    getCompanies,
+    findCompanyByToken,
+    getAllCompanies,
     updateCompany,
     deleteCompany,
     getCompanyById,
     getCompanyByEmail,
     findCompanyByLogin,
-    updatePassword
+    updatePassword,
+    updateJwtToken,
+    logout
 
 };

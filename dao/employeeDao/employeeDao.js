@@ -42,10 +42,11 @@ const updateEmployeePassword = async (id, password) => {
     });
   }
 
-  const updateEmployeeGroupId = async (id, group) => {
+  const updateEmployeeGroupId = async (id, group, date) => {
     return await Employee.findByIdAndUpdate({ _id:id }, {
       $set: {
-        groupId: group
+        groupId: group,
+        groupJoiningDate:date
       }
     });
   }

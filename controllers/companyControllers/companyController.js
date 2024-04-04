@@ -1,42 +1,72 @@
 const companyService = require("../../services/companyServices/companyService")
-
+const globalFunctions = require("../../utils/globalFunctions");
 
 
 
 const addNewCompany = async (req, res) => {
   try {
     const {
-        name,
-        address,
-        email,
-        phone,
-        activity,
-        service_date,
-        status,
-        account_name,
-        sort_code,
-        account_number,
-        bank_name,
-        login,
-        password,
-
+      name,
+      address,
+      email,
+      phone,
+      activity,
+      service_date,
+      statusCompany,
+      account_name,
+      sort_code,
+      account_number,
+      bank_name,
+      login,
+      password,
+      logoBase64String,
+      logoExtension,
+      legel_card_base64_string,
+      legal_card_extension,
     } = req.body;
+    const legalFilesPath = 'files/companyFiles/legalFiles/';
+    const logoFilesPath = 'files/companyFiles/logoFiles/';
+    let logo_file = globalFunctions.generateUniqueFilename(
+      logoExtension,
+      "logoCompany"
+    );
+    let legal_file = globalFunctions.generateUniqueFilename(
+      legal_card_extension,
+      "LegalCard"
+    );
 
-   const company = await companyService.createCompany({
-        name,
-        address,
-        email,
-        phone,
-        activity,
-        service_date,
-        status,
-        account_name,
-        sort_code,
-        account_number,
-        bank_name,
-        login,
-        password,
-    });
+    let documents = [
+      {
+        base64String: logoBase64String,
+        extension: logoExtension,
+        name: logo_file,
+        path: logoFilesPath
+      },
+      {
+        base64String: legel_card_base64_string,
+        extension: legal_card_extension,
+        name: legal_file,
+        path: legalFilesPath
+      }
+    ];
+
+    const company = await companyService.createCompany({
+      name,
+      address,
+      email,
+      phone,
+      activity,
+      service_date,
+      statusCompany,
+      account_name,
+      sort_code,
+      account_number,
+      bank_name,
+      login,
+      password,
+      logo_file,
+      legal_file
+    }, documents);
     res.json(company);
   } catch (error) {
     console.error(error);
@@ -48,18 +78,22 @@ const loginCompany = async (req, res) => {
   try {
     const { login, password } = req.body;
     const result = await companyService.loginCompany(login, password);
-    res.cookie('access_token', result.accessToken, { httpOnly: true, secure: true });
-    res.json(result);
+    res.json({ company: result });
   } catch (error) {
     console.error(error);
     res.status(401).send(error.message);
   }
 };
 
-const logoutCompany = (req, res) => {
-  res.clearCookie('access_token');
+//logout school account
+const logoutCompany = async (req, res) => {
+  let id = req.params.id;
+
+  await companyService.logout(id);
+
   res.sendStatus(200);
 };
+
 const getCompanies = async (req, res) => {
   try {
     const companies = await companyService.getCompanies();
@@ -86,6 +120,24 @@ const getCompanyById = async (req, res) => {
   }
 }
 
+// get school by token
+const getCompanyByJwtToken = async (req, res) => {
+  try {
+    const token = req.body.token;
+
+    const getCompany = await companyService.getCompanyByToken(token);
+
+    if (!getCompany) {
+      return res.status(404).send("company not found");
+    }
+    res.json({ company: getCompany });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send(error.message);
+  }
+};
+
+
 const deleteCompany = async (req, res) => {
   try {
     const companyId = req.params.id;
@@ -93,7 +145,7 @@ const deleteCompany = async (req, res) => {
     const deletedCompany = await companyService.deleteCompany(companyId);
 
     if (!deletedCompany) {
-      return res.status(404).send('Company not found');
+      return res.status(404).send("School not found");
     }
     res.sendStatus(200);
   } catch (error) {
@@ -182,4 +234,4 @@ const updatePassword = async (req, res) => {
     }
   };
 
-module.exports = { addNewCompany, getCompanies, getCompanyById, deleteCompany, updateCompany, getCompanyByEmail,loginCompany, logoutCompany, updatePassword  }
+module.exports = { addNewCompany, getCompanies,getCompanyByJwtToken, getCompanyById, deleteCompany, updateCompany, getCompanyByEmail,loginCompany, logoutCompany, updatePassword  }

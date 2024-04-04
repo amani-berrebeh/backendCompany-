@@ -73,6 +73,24 @@ async function getActiveGroups() {
   }
 }
 
+
+async function removeEmployeeFromGroup(groupId, employeeId) {
+  await groupEmployee.findByIdAndUpdate(groupId, {
+    $pull: { employees: employeeId }
+  });
+}
+async function getEmployeeInfo(groupId, employeeId) {
+  try {
+    // Construct query to find employee information based on groupId and employeeId
+    const employeeInfo = await groupEmployee.findOne({ _id: groupId, employees: employeeId })
+                                             .populate('employees')
+                                             .exec();
+    
+    return employeeInfo;
+  } catch (error) {
+    throw new Error('Error fetching employee information:', error);
+  }
+}
 module.exports = {
   getActiveGroups,
   getAllGroups,
@@ -84,4 +102,6 @@ module.exports = {
   updateGroupEmployee,
   deleteGroupEmployee,
   getallGroupEmployee,
+  removeEmployeeFromGroup,
+  getEmployeeInfo
 };

@@ -230,6 +230,22 @@ const getEmployeeByIdCompany = async (req, res) => {
   }
 };
 
+
+
+// const getEmployeeByIdCompany = async (req, res) => {
+//   try {
+//     const idCompany = req.query.idCompany; // Accessing idCompany from query parameters
+//     const getEmployeesByIdCompany = await employeeService.getEmployeeByIdCompany(idCompany);
+//     if (!getEmployeesByIdCompany) {
+//       res.status(404).send("Employee not found");
+//     }
+//     res.json({ employees: getEmployeesByIdCompany }); // Return employees as an array
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).send(error.message);
+//   }
+// };
+
 module.exports = {
   addNewEmployee,
   getEmployees,

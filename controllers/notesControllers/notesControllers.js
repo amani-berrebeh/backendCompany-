@@ -6,6 +6,7 @@ const addNewNote = async (req, res) => {
     const {
       title,
       message,
+      id_corporate,
       pdfBase64String,
       pdfExtension,
       photoBase64Strings,
@@ -38,6 +39,7 @@ const addNewNote = async (req, res) => {
     const note = await noteService.createNote({
       title,
       message,
+      id_corporate,
       pdf,
       photo
     }, documents);
@@ -109,6 +111,20 @@ const deleteNoteById = async (req, res) => {
     res.status(500).send(error.message);
   }
 };
+const getNotesByIdCompany = async (req, res) => {
+  try {
+    const id_corporate = req.body.id_corporate;
+    const getNotesByIdCompany =
+      await noteService.getNotesByIdCompany(id_corporate);
+    if (!getNotesByIdCompany) {
+      res.status(404).send("employee not found");
+    }
+    res.json({ getNotesByIdCompany });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send(error.message);
+  }
+};
 
 module.exports = {
   addNewNote,
@@ -116,4 +132,5 @@ module.exports = {
   getNoteById,
   getAllNotes,
   deleteNoteById,
+  getNotesByIdCompany
 };

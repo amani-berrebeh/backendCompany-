@@ -83,7 +83,9 @@ const updateComplain = async (id, updateData) => {
 const deleteComplain = async (id) => {
   return await Complain.findByIdAndDelete(id);
 };
-
+const getComplainByIdCompany = async (id_corporate) => {
+  return await Complain.find({id_corporate});
+}
 
 
 // const deleteComplain = async () => {
@@ -99,6 +101,7 @@ module.exports = {
   deleteComplain,
   updateComplaintStatus,
   updateComplainToPushed,
-  updateComplainToArchived
+  updateComplainToArchived,
+  getComplainByIdCompany
   
 };

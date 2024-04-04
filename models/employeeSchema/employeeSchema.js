@@ -17,6 +17,7 @@ const employeeSchema = new mongoose.Schema({
     legalcard: String,
     username: String,
     groupId: { type: Schema.Types.ObjectId, ref: 'groupEmployee' ,required:false },
+    groupJoiningDate:String,
     login: String,
     password:String,
     nationality:String, 
