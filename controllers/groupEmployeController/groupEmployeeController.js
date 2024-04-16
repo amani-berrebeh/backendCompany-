@@ -110,6 +110,37 @@ const updateGroupEmployee = async (req, res) => {
     res.status(500).send(error.message);
   }
 };
+// const addEmployeesToGroup = async (req, res) => {
+//   try {
+//     const { _id } = req.body;
+//     const {employees} = req.body
+
+   
+//     const updatedEmployeeGroup = await groupEmployeeService.addEmployeesToGroup(_id,employees );
+//     return res.status(200).json(updatedEmployeeGroup);
+//   } catch (error) {
+//     console.error(error);
+//     return res.status(500).json({ message: "Internal server error" });
+//   }
+// };
+
+async function addEmployeesToGroup(req, res) {
+  try {
+    const { _id } = req.body;
+    const { employees } = req.body;
+
+    if (!(_id && Array.isArray(employees) && employees.length > 0)) {
+      // Improved validation (check if employees array is not empty)
+      return res.status(400).json({ message: "Invalid request parameters" });
+    }
+
+    const updatedEmployeeGroup = await groupEmployeeService.addEmployeesToGroup(_id, employees);
+    return res.status(200).json(updatedEmployeeGroup);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+}
 
 const getGroupEmployeeById = async (req, res) => {
   try {
@@ -173,18 +204,15 @@ const deleteGroupEmployee = async (req, res) => {
 };
 async function removeEmployeeFromGroup(req, res) {
   try {
-    const groupId = req.params.groupId;
-   
-    const employeeId = req.params.employeeId;
-    console.log('groupId:', groupId);
-console.log('employeeId:', employeeId);
+      const groupId = req.params.groupId;
+      const employeeId = req.params.employeeId;
 
-    await groupEmployeeService.removeEmployeeFromGroup(groupId, employeeId);
+      await groupEmployeeService.removeEmployeeFromGroup(groupId, employeeId);
 
-    res.status(204).send(); // No content - Employee successfully removed from group
+      res.status(204).send(); // No content - Employee successfully removed from group
   } catch (error) {
-    console.error(error);
-    res.status(500).send(error.message);
+      console.error('Error removing employee from group:', error);
+      res.status(500).send(error.message);
   }
 }
 
@@ -198,4 +226,5 @@ module.exports = {
   deleteGroupEmployee,
   getGroupByIdCompany,
   removeEmployeeFromGroup,
+  addEmployeesToGroup
 };

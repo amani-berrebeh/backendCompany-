@@ -42,6 +42,43 @@ const getallGroupEmployee = async () => {
     .populate("program")
     .exec();
 };
+// const addEmployeesToGroup= async(_id, newEmployees)=> {
+//   try {
+//       const newEmployeesGroup = await groupEmployee.findByIdAndUpdate(
+//           _id,
+//           { employees: newEmployees },
+//           { new: true } // to return the updated document
+//       );
+//       return newEmployeesGroup;
+//   } catch (error) {
+//       throw error;
+//   }
+// }
+async function addEmployeesToGroup(groupId, employees) {
+  try {
+ 
+    const updatedGroup = await groupEmployee.findByIdAndUpdate(
+      groupId,
+      {
+        $push: {
+          employees: {
+            $each: employees.map((id) => ({
+              _id: id,
+              groupId: groupId, 
+              groupJoiningDate: new Date().toISOString(), // Set joining date to current time
+            })),
+          },
+        },
+      },
+      { new: true } 
+    );
+
+
+  } catch (error) {
+   
+  }
+}
+
 const getGroupEmployeeById = async (id) => {
   return await groupEmployee.findById(id);
 };
@@ -74,23 +111,50 @@ async function getActiveGroups() {
 }
 
 
-async function removeEmployeeFromGroup(groupId, employeeId) {
-  await groupEmployee.findByIdAndUpdate(groupId, {
-    $pull: { employees: employeeId }
-  });
-}
-async function getEmployeeInfo(groupId, employeeId) {
-  try {
-    // Construct query to find employee information based on groupId and employeeId
-    const employeeInfo = await groupEmployee.findOne({ _id: groupId, employees: employeeId })
-                                             .populate('employees')
-                                             .exec();
+// async function removeEmployeeFromGroup(groupId, employeeId) {
+//   await groupEmployee.findByIdAndUpdate(groupId, {
+//     $pull: { employees: employeeId }
+//   });
+// }
+// async function getEmployeeInfo(groupId, employeeId) {
+//   try {
+//     // Construct query to find employee information based on groupId and employeeId
+//     const employeeInfo = await groupEmployee.findOne({ _id: groupId, employees: employeeId })
+//                                              .populate('employees')
+//                                              .exec();
     
-    return employeeInfo;
+//     return employeeInfo;
+//   } catch (error) {
+//     throw new Error('Error fetching employee information:', error);
+//   }
+// }
+
+async function removeEmployeeFromGroup(groupId, employeeId) {
+  try {
+      await groupEmployee.findByIdAndUpdate(groupId, {
+          $pull: { employees: employeeId }
+      });
   } catch (error) {
-    throw new Error('Error fetching employee information:', error);
+      throw new Error('Error removing employee from group: ' + error.message);
   }
 }
+
+async function getEmployeeInfo(groupId, employeeId) {
+  try {
+      // Find the employee with the given _id and groupId
+      const employeeInfo = await Employee.findOne({ _id: employeeId, groupId: groupId });
+
+      if (!employeeInfo) {
+          throw new Error('Employee not found in the group.');
+      }
+
+      return employeeInfo;
+  } catch (error) {
+      throw new Error('Error fetching employee information: ' + error.message);
+  }
+}
+
+
 module.exports = {
   getActiveGroups,
   getAllGroups,
@@ -103,5 +167,6 @@ module.exports = {
   deleteGroupEmployee,
   getallGroupEmployee,
   removeEmployeeFromGroup,
-  getEmployeeInfo
+  getEmployeeInfo,
+  addEmployeesToGroup
 };
