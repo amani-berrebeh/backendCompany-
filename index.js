@@ -11,6 +11,11 @@ const groupEmployeeRoutes= require("./routes/groupCompanyRoutes/groupCompanyRout
 const complainRoutes = require("./routes/complainRoutes/complainRoutes")
 const noteRoutes = require("./routes/noteRoutes/noteRoutes")
 const programRoutes = require ("./routes/programRoutes/programRoutes")
+const contractRoutes = require("./routes/contractRoutes/contractRoutes")
+const luggageRoutes = require("./routes/luggageRoutes/luggageRoutes")
+const vehicleTypeRoutes = require("./routes/vehicleTypeRoutes/vehicleTypeRoutes")
+const journeyRoutes = require("./routes/journeyRoutes/journeyRoutes")
+const quoteRoutes = require("./routes/quoteRoutes/quoteRoutes")
 dotenv.config();
 app.use(cors())
 app.use(express.static('files'));
@@ -33,7 +38,11 @@ app.use("/studentAttendance",studentAttendanceRoutes)
 app.use("/groupEmployee",groupEmployeeRoutes)
 app.use("/notes",noteRoutes)
 app.use("/programs", programRoutes)
-
+app.use("/contract", contractRoutes)
+app.use("/luggage", luggageRoutes)
+app.use("/vehicleType", vehicleTypeRoutes)
+app.use("/journey", journeyRoutes)
+app.use("/quote", quoteRoutes)
 
 app.listen(8800, () => {
     console.log("Backend server is running!");
