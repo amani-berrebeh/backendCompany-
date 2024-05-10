@@ -1,6 +1,6 @@
 const Contract = require("../../models/contractSchema/contractSchema");
 
-const createContract = async (contractData) => {
+const createContract = async (ContractData) => {
   try {
     const currentYear = new Date().getFullYear();
     const latestContract = await Contract.findOne(
@@ -9,17 +9,17 @@ const createContract = async (contractData) => {
       { sort: { updatedAt: -1 } }
     );
     let latestNumber = 0;
-    if (latestContract && latestContract.accountRef) {
-      const match = latestContract.accountRef.match(/C\d{4}\/(\d+)/);
+    if (latestContract && latestContract.contractRef) {
+      const match = latestContract.contractRef.match(/C\d{4}\/(\d+)/);
       if (match) {
-        latestNumber = parseInt(match[1], 10); 
+        latestNumber = parseInt(match[1], 10);
       }
     }
     const newNumber = latestNumber + 1;
     const paddedNumber = newNumber.toString().padStart(4, "0");
     const contractRef = `C${currentYear}/${paddedNumber}`;
-    contractData.accountRef = contractRef;
-    const newContract = await Contract.create(contractData);
+    ContractData.contractRef = contractRef;
+    const newContract = await Contract.create(ContractData);
 
     return newContract;
   } catch (error) {
@@ -27,7 +27,6 @@ const createContract = async (contractData) => {
     throw error;
   }
 };
-
 const updateContract = async (id, updateData) => {
   return await Contract.findByIdAndUpdate(id, updateData, { new: true });
 };
@@ -41,23 +40,42 @@ const getContracts = async () => {
     .populate("idProgram")
     .populate("vehicleType")
     .populate("journeyType")
-    .populate("luggageDetails")
-  
+    .populate("luggageDetails");
+  // .populate("salesperson")
 };
 
 const getContractById = async (id) => {
   return await Contract.findById(id);
 };
 
-// const getContractByIdCorporate = async (idCorporate) => {
-//   return await Complain.find({idCorporate});
-// }
-
+const updateContractStatus = async (id, effectiveDate) => {
+  return await Contract.findByIdAndUpdate(
+    { _id: id },
+    {
+      $set: {
+        effectiveDate: effectiveDate,
+        contractStatus: "Approved",
+      },
+    }
+  );
+};
+const getContractByIdCompany = async (idCompany) => {
+  console.log("Dao",idCompany)
+  const query = {
+    "idCompany": idCompany
+};
+  return await Contract.find(query)
+    .populate("idProgram")
+    .populate("vehicleType")
+    .populate("journeyType")
+    .populate("luggageDetails");
+};
 module.exports = {
   getContractById,
   createContract,
   updateContract,
   deletedContract,
   getContracts,
-  // getContractByIdCorporate
+  updateContractStatus,
+  getContractByIdCompany,
 };

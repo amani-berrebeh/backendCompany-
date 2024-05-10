@@ -8,6 +8,7 @@ const createContract = async (req, res) => {
       customerNotes,
       staffNotes,
       prices,
+      unit_price,
       salesperson,
       idProgram,
       idAccount,
@@ -19,6 +20,12 @@ const createContract = async (req, res) => {
       accountEmail,
       accountName,
       accountRef,
+      paymentMethod,
+      effectiveDate,
+      within_payment_days,
+      contract_number,
+      subTotal,
+      tva
     } = req.body;
     const newContract = await contractService.createContract({
       contractName,
@@ -26,6 +33,7 @@ const createContract = async (req, res) => {
       customerNotes,
       staffNotes,
       prices,
+      unit_price,
       salesperson,
       idProgram,
       idAccount,
@@ -37,6 +45,12 @@ const createContract = async (req, res) => {
       accountEmail,
       accountName,
       accountRef,
+      paymentMethod,
+      effectiveDate,
+      within_payment_days,
+      contract_number,
+      subTotal,
+      tva
     });
     console.log(newContract);
     res.status(201).json(newContract);
@@ -137,20 +151,35 @@ const getContractById = async (req, res) => {
     res.status(500).send(error.message);
   }
 };
-// const getContractByIdCorporate = async (req, res) => {
-//   try {
-//     const idCorporate = req.body.idCorporate;
-//     const getComplainByIdCompany =
-//       await contractService.getContractByIdCorporate(idCorporate);
-//     if (!getComplainByIdCompany) {
-//       res.status(404).send("employee not found");
-//     }
-//     res.json({ getComplainByIdCompany });
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).send(error.message);
-//   }
-// };
+
+const updateContractStatusToApprovedAPI = async (req, res) => {
+  try {
+    const { contract_id, effectiveDate } = req.body;
+    const sentResult = await contractService.updateContractStatusToApproved({
+      contract_id,
+      effectiveDate,
+    });
+    res.json({ success: sentResult });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send(error.message);
+  }
+};
+const getContractByIdCompany = async (req, res) => {
+  try {
+    const idCompany = req.params.id;
+    console.log("controller",idCompany)
+    const getContract = await contractService.getContractByIdCompany(idCompany);
+
+    if (!getContract) {
+      return res.status(404).send("Contract not found");
+    }
+    res.json(getContract);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send(error.message);
+  }
+};
 
 module.exports = {
   getContractById,
@@ -158,5 +187,6 @@ module.exports = {
   deleteContract,
   updateContract,
   createContract,
-  // getContractByIdCorporate
+  updateContractStatusToApprovedAPI,
+  getContractByIdCompany
 };

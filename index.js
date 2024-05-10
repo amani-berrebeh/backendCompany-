@@ -1,5 +1,7 @@
 const express = require("express");
 const app = express();
+const { createServer } = require("http");
+const { Server } = require("socket.io");
 const mongoose = require("mongoose");
 const cors =require ("cors");
 const dotenv = require("dotenv");
@@ -16,6 +18,20 @@ const luggageRoutes = require("./routes/luggageRoutes/luggageRoutes")
 const vehicleTypeRoutes = require("./routes/vehicleTypeRoutes/vehicleTypeRoutes")
 const journeyRoutes = require("./routes/journeyRoutes/journeyRoutes")
 const quoteRoutes = require("./routes/quoteRoutes/quoteRoutes")
+const paggengerLuggagerLimitRoutes = require("./routes/passengerLuggageLimitRoutes/passengerLuggageLimitRoutes")
+const httpServer = createServer(app);
+const io = new Server(httpServer, {  cors: {
+    origin: ["http://localhost:3000","http://localhost:3001"]
+  } });
+
+io.on("connection", (socket) => {
+  console.log("hello socket")
+  socket.on("live-tracking-driver-emit", (arg) => {
+    console.log(arg); // world
+    io.emit("live-tracking-companies-listening", arg);
+  });
+});
+
 dotenv.config();
 app.use(cors())
 app.use(express.static('files'));
@@ -43,7 +59,8 @@ app.use("/luggage", luggageRoutes)
 app.use("/vehicleType", vehicleTypeRoutes)
 app.use("/journey", journeyRoutes)
 app.use("/quote", quoteRoutes)
+app.use("/passengerLuggageLimit", paggengerLuggagerLimitRoutes)
 
-app.listen(8800, () => {
+httpServer.listen(8800, () => {
     console.log("Backend server is running!");
 });

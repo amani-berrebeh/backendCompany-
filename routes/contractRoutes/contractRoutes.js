@@ -8,5 +8,5 @@ router.get("/getContractByID/:id", contractController.getContractById);
 router.put("/updateContract/:id", contractController.updateContract);
 router.delete("/deleteContract/:id", contractController.deleteContract);
 router.get("/getAllContracts", contractController.getContracts);
-// router.post('/getContractByIdCorporate',contractController.getContractByIdCorporate)
+router.post('/getContractByIdCorporate/:id',contractController.getContractByIdCompany)
 module.exports = router;

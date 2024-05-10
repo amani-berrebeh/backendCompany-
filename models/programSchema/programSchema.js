@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
-
-const programSchema = new mongoose.Schema(
+const Schema = mongoose.Schema;
+const programmSchema = new mongoose.Schema(
   {
     programName: String,
     origin_point: {
@@ -10,11 +10,12 @@ const programSchema = new mongoose.Schema(
         lng: Number,
       },
     },
-    stops: [{
-      id: String,
-      address: String,
-      time: String,
-    }
+    stops: [
+      {
+        id: String,
+        address: String,
+        time: String,
+      },
     ],
     destination_point: {
       placeName: String,
@@ -33,11 +34,34 @@ const programSchema = new mongoose.Schema(
     pickUp_Time: String,
     dropOff_time: String,
     workDates: [String],
+    company_id: { type: Schema.Types.ObjectId, ref: "Company", default: null },
+    school_id: String,
+    notes_for_client: [
+      {
+        msg: String,
+        date: String,
+        sender: String,
+      },
+    ],
+    notes_for_admin: [String],
+    unit_price: String,
+    total_price: String,
+    journeyType:String,
+    luggage:String,
+    vehiculeType:String,
+    program_status: [
+      {
+        status: String,
+        date_status: String,
+      },
+    ],
+    invoiceFrequency: String,
+    status: String,
+    within_payment_days: String
   },
   {
     timestamps: true,
   }
-  
 );
 
-module.exports = mongoose.model("Programm", programSchema);
+module.exports = mongoose.model("Programm", programmSchema);
